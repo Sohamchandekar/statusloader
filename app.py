@@ -6,34 +6,8 @@ import re
 # Sample dataframeSafai function as defined above
 def dataframeSafai(csv_file):
     df = pd.read_csv(csv_file)
-    columns_to_drop = ['certificate_preview', 'extension_preview', 'appeal_status', 'complain_against_status']
+    columns_to_drop = ['certificate_preview', 'extension_preview', 'appeal_status', 'complain_against_status', 'extension_status']
     df = df.drop(columns=[col for col in columns_to_drop if col in df.columns], errors='ignore')
-
-    def color_application_status(status):
-        if isinstance(status, str):
-            status_lower = status.lower()
-            if "done" in status_lower:
-                return f'<span style="color:green">{status}</span>'
-            elif "pending" in status_lower:
-                return f'<span style="color:red">{status}</span>'
-            elif re.search(r'pending', status_lower, re.IGNORECASE):
-                return f'<span style="color:red">{status}</span>'
-            else:
-                return status
-        return status
-
-    def color_payment_status(status):
-        if isinstance(status, str):
-            status_lower = status.lower()
-            if "done" in status_lower:
-                return f'<span style="color:green">{status}</span>'
-            elif "pending" in status_lower:
-                return f'<span style="color:red">{status}</span>'
-            elif re.search(r'pending', status_lower, re.IGNORECASE):
-                return f'<span style="color:red">{status}</span>'
-            else:
-                return status
-        return status
 
     def format_scrutiny_status(status):
         if isinstance(status, str):
@@ -90,9 +64,43 @@ def save_persistent_data(df):
     df.to_csv('uploaded_data.csv', index=False)
 
 
-# Function to add custom styling to tables
+# # Function to add custom styling to tables
+# def style_dataframe(df):
+#     styled_df = df.style.set_table_styles(
+#         [
+#             {'selector': 'thead th',
+#              'props': 'background-color: #003366; color: white; text-align: center; font-size: 16px; font-family: Arial;'},
+#             {'selector': 'tbody td', 'props': 'text-align: center; font-family: Arial; border: 1px solid black;'},
+#         ]
+#     ).set_properties(**{
+#         'border': '1px solid black',
+#         'font-size': '14px'
+#     })
+
+#     styled_df = styled_df.applymap(lambda x: '', subset=pd.IndexSlice[::2, :]).set_properties(
+#         subset=pd.IndexSlice[::2, :], **{'background-color': 'lightgray'}
+#     ).set_properties(
+#         subset=pd.IndexSlice[1::2, :], **{'background-color': 'white'}
+#     )
+
+#     return styled_df
+    
 def style_dataframe(df):
-    styled_df = df.style.set_table_styles(
+    def apply_status_colors(val):
+        color = ''
+        if isinstance(val, str):
+            if "pending" in val.lower():
+                color = 'red'
+            elif "done" in val.lower():
+                color = 'green'
+            elif "in process" in val.lower():
+                color = 'orange'
+        return f'color: {color}' if color else ''
+
+    # Apply color based on conditions for specific columns
+    styled_df = df.style.map(apply_status_colors, subset=['application_status', 'payment_status', 'scrutiny_status'])
+
+    styled_df = styled_df.set_table_styles(
         [
             {'selector': 'thead th',
              'props': 'background-color: #003366; color: white; text-align: center; font-size: 16px; font-family: Arial;'},
@@ -110,6 +118,7 @@ def style_dataframe(df):
     )
 
     return styled_df
+
 
 
 # Main Streamlit application
