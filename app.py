@@ -6,7 +6,7 @@ import re
 # Sample dataframeSafai function as defined above
 def dataframeSafai(csv_file):
     df = pd.read_csv(csv_file)
-    columns_to_drop = ['certificate_preview', 'extension_preview', 'appeal_status', 'complain_against_status', 'extension_status']
+    columns_to_drop = ['certificate_preview', 'extension_preview', 'appeal_status', 'complain_against_status', 'additional_data']
     df = df.drop(columns=[col for col in columns_to_drop if col in df.columns], errors='ignore')
 
     def format_scrutiny_status(status):
