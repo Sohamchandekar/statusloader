@@ -264,11 +264,11 @@ def style_dataframe(df):
         [
             # Header styling with bold text, background color, and larger font size
             {'selector': 'thead th',
-             'props': 'background-color: #ff9900; color: black; text-align: center; font-size: 20px; font-family: Arial; font-weight: bolder;'},
+             'props': 'background-color: #ff9900; color: black; text-align: center; font-size: 30px; font-family: Arial; font-weight: bolder;'},
 
             # Cell styling with border, alignment, and bold text for all cells
             {'selector': 'tbody td',
-             'props': 'text-align: center; font-family: Arial; border: 1px solid black; font-size: 16px; font-weight: bolder;'},
+             'props': 'text-align: center; font-family: Arial; border: 1px solid black; font-size: 28px; font-weight: bolder;'},
         ]
     ).set_properties(**{
         'border': '1px solid black',  # Strong borders for visibility
