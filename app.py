@@ -197,7 +197,7 @@ def authenticate_user(user_id, password, user_data):
 
 def dataframeSafai(csv_file):
     df = pd.read_csv(csv_file)
-    columns_to_drop = ['certificate_preview', 'extension_preview', 'appeal_status', 'application_status', 'payment_status', 'correction_status', 'extension_status', 'additional_data', 'complain_against_status']
+    columns_to_drop = ['certificate_preview', 'extension_preview', 'appeal_status', 'correction_status', 'extension_status', 'additional_data', 'complain_against_status']
     df = df.drop(columns=[col for col in columns_to_drop if col in df.columns], errors='ignore')
 
     def format_scrutiny_status(status):
