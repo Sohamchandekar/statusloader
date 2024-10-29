@@ -197,7 +197,9 @@ def authenticate_user(user_id, password, user_data):
 
 def dataframeSafai(csv_file):
     df = pd.read_csv(csv_file)
-    columns_to_drop = ['certificate_preview', 'extension_preview', 'appeal_status', 'correction_status', 'extension_status', 'additional_data', 'complain_against_status']
+    columns_to_drop = ['certificate_preview', 'extension_preview', 'appeal_status', 'correction_status', 
+                       'extension_status', 'additional_data', 'complain_against_status', 'Unnamed: 0',
+                      'application_status', 'payment_status']
     df = df.drop(columns=[col for col in columns_to_drop if col in df.columns], errors='ignore')
 
     def format_scrutiny_status(status):
@@ -243,20 +245,20 @@ def save_persistent_data(df):
 # Function to add custom styling to tables with color based on status
 def style_dataframe(df):
     # Apply custom colors based on status
-    def apply_status_colors(val):
-        color = ''
-        if isinstance(val, str):
-            if "pending" in val.lower():
-                color = 'red'
-            elif "done" in val.lower():
-                color = 'green'
-            elif "in process" in val.lower():
-                color = 'orange'
-        return f'color: {color}; font-weight: bold' if color else 'font-weight: bold'
+    # def apply_status_colors(val):
+    #     color = ''
+    #     if isinstance(val, str):
+    #         if "pending" in val.lower():
+    #             color = 'red'
+    #         elif "done" in val.lower():
+    #             color = 'green'
+    #         elif "in process" in val.lower():
+    #             color = 'orange'
+    #     return f'color: {color}; font-weight: bold' if color else 'font-weight: bold'
 
-    # Apply color based on conditions for specific columns and make all text bold
-    styled_df = df.style.applymap(apply_status_colors,
-                                  subset=['application_status', 'payment_status', 'scrutiny_status'])
+    # # Apply color based on conditions for specific columns and make all text bold
+    # styled_df = df.style.applymap(apply_status_colors,
+    #                               subset=['application_status', 'payment_status', 'scrutiny_status'])
 
     # Table styling
     styled_df = styled_df.set_table_styles(
